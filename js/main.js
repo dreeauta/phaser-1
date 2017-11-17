@@ -7,6 +7,7 @@ var GameState = {
     this.load.image('monkey', './assets/monkey.png');
     this.load.image('mouse', './assets/mouse.png');
     this.load.image('pig', './assets/pig.png');
+    game.load.image('missile', './assets/missile.png')
 
   },
   create: function() {
@@ -25,12 +26,31 @@ var GameState = {
 
     this.mouse = this.game.add.sprite(400,350, 'mouse');
     this.mouse.scale.setTo(.2);
-    this.mouse.angle = 45; 
-    // this.pig = this.game.add.sprite(350,210, 'pig');
+    this.mouse.angle = 45;
 
+    // this.missile = this.game.add.sprite(40, 200, 'missile');
+    // this.missile.scale.setTo(.2);
+    // this.missile.angle = 45;
+
+    this.missileGroup = game.add.group();
+    game.input.onDown.add(this.addMissile, this);
 
   },
+  addMissile: function() {
+    if (this.missileGroup.length > 1 ){
+      return;
+    }
+    var missile = this.missileGroup.create(game.input.x,game.height-100,'missile');
+    missile.width= game.width * .25;
+    missile.height=game.height * .25;
+  },
   update: function() {
+    this.missileGroup.forEach(function(item) {
+      item.y-=3;
+      if (item.y < 0) {
+        item.destroy();
+      }
+    }.bind(this));
 
   }
 };
